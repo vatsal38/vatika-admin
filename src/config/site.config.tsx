@@ -33,7 +33,7 @@ export const metaObject = (
       url: 'https://vatika-admin.vercel.app',
       siteName: 'Vatika Green', // https://developers.google.com/search/docs/appearance/site-names
       images: {
-        url: '../../public/vatika.png',
+        url: '/vatika.png',
         width: 1200,
         height: 630,
       },
