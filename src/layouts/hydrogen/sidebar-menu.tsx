@@ -17,13 +17,12 @@ export function SidebarMenu() {
   );
   const pathname = usePathname();
 
-  const menuItems = permissionDrawerData.filter(
-    (item: any) =>
-      item.name === 'Dashboard' ||
-      session?.data?.user?.data?.permissions?.some(
-        (permission: any) =>
-          permission.resource.toLowerCase() === item.name.toLowerCase()
-      )
+  const menuItems = permissionDrawerData.filter((item: any) =>
+    // item.name === 'Dashboard' ||
+    session?.data?.user?.data?.permissions?.some(
+      (permission: any) =>
+        permission.resource.toLowerCase() === item.name.toLowerCase()
+    )
   );
 
   return (

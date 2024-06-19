@@ -1,6 +1,5 @@
 import { Toaster } from 'react-hot-toast';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options';
 import AuthProvider from '@/app/api/auth/[...nextauth]/auth-provider';
 import GlobalDrawer from '@/app/shared/drawer-views/container';
 import GlobalModal from '@/app/shared/modal-views/container';
@@ -12,6 +11,7 @@ import NextProgress from '@/components/next-progress';
 
 // styles
 import '@/app/globals.css';
+import { authOptions } from './api/auth/[...nextauth]/AuthOption';
 
 export const metadata = {
   title: siteConfig.title,

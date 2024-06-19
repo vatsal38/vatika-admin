@@ -1,7 +1,7 @@
 'use server';
+import { authOptions } from './app/api/auth/[...nextauth]/AuthOption';
 import DataService from './services/requestApi';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from './AuthOption';
 
 async function generateServerAction(func, token, ...args) {
   const responseObj = {

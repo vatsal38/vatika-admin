@@ -27,7 +27,7 @@ export default function SignInForm() {
 
   const redirection = () => {
     if (sessionStatus === 'authenticated') {
-      router.push('/dashboard');
+      router.push('/category');
     } else {
       router.push('/signin');
     }
