@@ -44,9 +44,11 @@ export default function ProductForm() {
   const isEdit: any = params?.slug[1];
   const [loading, setLoading] = useState(false);
   const [isloading, setIsLoading] = useState(false);
+  const [isCategoryloading, setIsCategoryLoading] = useState(false);
   const [selectedType, setSelectedType] = useState<any>();
   const [categoryList, setCategoryList] = useState([]);
   const [categoryId, setCategoryId] = useState<any>();
+  const [subCategoryId, setSubCategoryId] = useState<any>();
   const [imageFile, setImageFile] = useState<any>(null);
   const [imagePreview, setImagePreview] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<any>();
@@ -66,13 +68,14 @@ export default function ProductForm() {
     try {
       setIsLoading(true);
       const { data } = (await CallGetProductById(productId)) as any;
+
       if (data?.message === 'Success') {
         const label = data?.data?.type === 'single' ? 'Single' : 'Multiple';
         const type = data?.data?.type;
         setValue('name', data?.data?.name);
         setValue('sequence', data?.data?.sequence);
         setValue('short_description', data?.data?.short_description);
-        setCategoryId(data?.data?.category);
+        setSubCategoryId(data?.data?.category);
         setSelectedType({ label: label, value: type });
         if (data?.data?.mrp) {
           setValue('mrp', data?.data?.mrp);
@@ -96,34 +99,36 @@ export default function ProductForm() {
 
   const listCategory = async () => {
     try {
-      setIsLoading(true);
+      setIsCategoryLoading(true);
       const { data: response } = (await CallAllCategory()) as any;
       if (response) {
         setCategoryList(response?.data);
-        setIsLoading(false);
+        setIsCategoryLoading(false);
       }
     } catch (error) {
       console.error('Login error:', error);
+      setIsCategoryLoading(false);
     }
   };
 
   useEffect(() => {
     listCategory();
-  }, []);
+  }, [categoryId]);
 
   const onSubmit: SubmitHandler<FormDataList> = async (data) => {
     try {
       setLoading(true);
       if (isEdit) {
         if (!selectedType?.value) {
-          setErrorMsg('This fiels is required');
+          setErrorMsg('This field is required');
           return;
         }
         const productData = new FormData();
         productData.append('name', data.name);
         productData.append('sequence', data.sequence);
         productData.append('short_description', data.short_description);
-        productData.append('category', categoryId?._id);
+        productData.append('category', subCategoryId?._id ? subCategoryId?._id : categoryId?._id);
+
         productData.append('type', selectedType?.value);
         if (data.mrp) {
           productData.append('mrp', data.mrp);
@@ -149,7 +154,8 @@ export default function ProductForm() {
         productData.append('name', data.name);
         productData.append('sequence', data.sequence);
         productData.append('short_description', data.short_description);
-        productData.append('category', categoryId?._id);
+        productData.append('category', subCategoryId?._id);
+
         productData.append('type', selectedType?.value);
         if (data.mrp) {
           productData.append('mrp', data.mrp);
@@ -188,6 +194,12 @@ export default function ProductForm() {
       setImagePreview(null);
     }
   };
+
+  useEffect(() => {
+    if (categoryId?.sub_category?.length !== 0 && !isCategoryloading) {
+      setSubCategoryId(null)
+    }
+  }, [categoryId, isCategoryloading])
 
   return (
     <>
@@ -340,7 +352,7 @@ export default function ProductForm() {
 
               <Select
                 label="Category"
-                placeholder={'Select a type'}
+                placeholder={'Select a category'}
                 options={categoryList}
                 getOptionDisplayValue={(option: any) => option?.name}
                 onChange={(selectedOption: any) =>
@@ -349,6 +361,17 @@ export default function ProductForm() {
                 value={categoryId}
                 size="lg"
               />
+              {categoryId?.sub_category?.length !== 0 && <Select
+                label="Sub Category"
+                placeholder={'Select a sub category'}
+                options={categoryId?.sub_category}
+                getOptionDisplayValue={(option: any) => option?.name}
+                onChange={(selectedOption: any) =>
+                  setSubCategoryId(selectedOption)
+                }
+                value={subCategoryId}
+                size="lg"
+              />}
 
               {selectedType?.value === 'single' && (
                 <>

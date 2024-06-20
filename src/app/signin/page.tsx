@@ -11,12 +11,12 @@ export const metadata = {
 export default function SignIn() {
   return (
     <AuthWrapperOne
-      title={
-        <span className="relative inline-block">
-          Sign in
-          <UnderlineShape className="absolute -bottom-2 start-0 h-2.5 w-24 text-blue md:w-28 xl:-bottom-1.5 xl:w-36" />
-        </span>
-      }
+    // title={
+    //   <div className="relative inline-block w-full text-center">
+    //     Sign in
+    //     <UnderlineShape className="absolute -bottom-2 start-32 h-2.5 w-24 text-blue md:w-28 xl:-bottom-1.5 xl:w-36" />
+    //   </div>
+    // }
     >
       <SignInForm />
     </AuthWrapperOne>

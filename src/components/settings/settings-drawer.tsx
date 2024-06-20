@@ -11,16 +11,16 @@ import ThemeSwitcher from '@/components/settings/theme-switcher';
 export default function SettingsDrawer() {
   return (
     <>
-      <SimpleBar className="h-[calc(100%-138px)]">
+      <SimpleBar className="h-[calc(100%-38px)]">
         <div className="px-5 py-6">
           <ThemeSwitcher />
-          <AppDirection />
+          {/* <AppDirection />
           <LayoutSwitcher />
-          <ColorOptions />
+          <ColorOptions /> */}
         </div>
       </SimpleBar>
 
-      <SettingsFooterButton />
+      {/* <SettingsFooterButton /> */}
     </>
   );
 }

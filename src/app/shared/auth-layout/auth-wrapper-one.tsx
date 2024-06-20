@@ -42,7 +42,7 @@ export default function AuthWrapperOne({
       <div className="min-h-screen justify-center gap-x-8 px-4 py-8 pt-10 md:pt-12 lg:flex lg:p-6 xl:gap-x-10 xl:p-7 2xl:p-10 2xl:pt-10 [&>div]:min-h-[calc(100vh-80px)]">
         <div className="relative flex w-full items-center justify-center lg:w-5/12 2xl:justify-end 2xl:pe-24">
           <div className=" w-full max-w-sm md:max-w-md lg:py-7 lg:ps-3 lg:pt-16 2xl:w-[630px] 2xl:max-w-none 2xl:ps-20 2xl:pt-7">
-            <div className="mb-7 px-6 pt-3 text-center md:pt-0 lg:px-0 lg:text-start xl:mb-8 2xl:mb-10">
+            <div className="mb-7 px-6 pt-3 text-center md:pt-0 lg:px-0 lg:text-center xl:mb-8 2xl:mb-10">
               <Link
                 href={'/'}
                 className="mb-6 inline-flex max-w-[168px] xl:mb-8"
@@ -50,7 +50,7 @@ export default function AuthWrapperOne({
                 <img
                   src={'logo-vatika.png'}
                   alt="Isomorphic"
-                  className="ps-2.5 dark:invert"
+                  className="dark:invert"
                 />
               </Link>
               <Title

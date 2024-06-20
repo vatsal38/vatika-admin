@@ -1,36 +1,31 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { PiArrowRightBold } from 'react-icons/pi';
-import { Button, Input, Loader, Select, Text } from 'rizzui';
-import { useParams, useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
 import {
-  CallCreateBanner,
-  CallCreateCategory,
-  CallGetBannerById,
-  CallUpdateBanner,
+  CallGetCategoryById,
+  CallUpdateCategory,
 } from '@/_ServerActions';
 import FormGroup from '@/app/shared/form-group';
-import { useSession } from 'next-auth/react';
+import cn from '@/utils/class-names';
+import React, { useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { PiArrowRightBold, PiXBold } from 'react-icons/pi';
+import { ActionIcon, Button, Input, Loader, Modal, Title } from 'rizzui';
 
 type FormDataList = {
-  title: string;
-  type: string;
-  email: string;
-  image: any;
+  name: string;
   sequence: string;
-  url: string
+  image: any;
+  colour: string;
+  size: string;
 };
 
-export default function BannerForm() {
-  const route = useRouter();
-  const params = useParams();
-  const bannerId = params?.slug[0];
-  const isEdit: any = params?.slug[1];
+function EditCategory({
+  onOpen,
+  setIsOpen,
+  categoryId,
+  handleCategoryEdited,
+}: any) {
   const [loading, setLoading] = useState(false);
   const [isloading, setIsLoading] = useState(false);
-  const [selectedType, setSelectedType] = useState<any>();
   const [imageFile, setImageFile] = useState<any>(null);
   const [imagePreview, setImagePreview] = useState<any>(null);
 
@@ -42,20 +37,16 @@ export default function BannerForm() {
     getValues,
     setValue,
     reset,
+    control,
   } = useForm<FormDataList>();
-  const session: any = useSession();
-  const token = session?.data?.user?.token;
 
-  const getBannerById = async () => {
+  const getCategoryById = async () => {
     try {
       setIsLoading(true);
-      const { data } = (await CallGetBannerById(bannerId)) as any;
+      const { data } = (await CallGetCategoryById(categoryId)) as any;
       if (data?.message === 'Success') {
-        setValue('title', data?.data?.title);
-        setValue('type', data?.data?.type);
+        setValue('name', data?.data?.name);
         setValue('sequence', data?.data?.sequence);
-        setValue('url', data?.data?.url);
-        setSelectedType(data?.data?.type);
         setImagePreview(data?.data?.image_url);
         setIsLoading(false);
       }
@@ -65,49 +56,30 @@ export default function BannerForm() {
   };
 
   useEffect(() => {
-    if (isEdit) {
-      getBannerById();
-    }
-  }, [token]);
+
+    getCategoryById();
+
+  }, [onOpen]);
 
   const onSubmit: SubmitHandler<FormDataList> = async (data) => {
     try {
       setLoading(true);
-      if (isEdit) {
-        const bannerData = new FormData();
-        bannerData.append('title', data.title);
-        bannerData.append('type', selectedType?.value);
-        bannerData.append('sequence', data.sequence);
-        bannerData.append('sequence', data.url);
-        if (imageFile) {
-          bannerData.append('image', imageFile);
-        }
-        const { data: response } = (await CallUpdateBanner(
-          bannerData,
-          bannerId
-        )) as any;
 
-        if (response) {
-          toast.success(response?.message);
-          reset();
-          route.push('/banner');
-        }
-      } else {
-        const bannerData = new FormData();
-        bannerData.append('title', data.title);
-        bannerData.append('type', selectedType?.value);
-        bannerData.append('sequence', data.sequence);
-        bannerData.append('sequence', data.url);
-        if (imageFile) {
-          bannerData.append('image', imageFile);
-        }
-        const { data: response } = (await CallCreateBanner(bannerData)) as any;
-
-        if (response) {
-          toast.success(response?.message);
-          reset();
-          route.push('/banner');
-        }
+      const CategoryData = new FormData();
+      CategoryData.append('name', data?.name);
+      CategoryData.append('sequence', data?.sequence);
+      if (imageFile) {
+        CategoryData.append('image', imageFile);
+      }
+      const { data: response } = (await CallUpdateCategory(
+        CategoryData,
+        categoryId
+      )) as any;
+      if (response) {
+        toast.success(response?.message);
+        reset();
+        setIsOpen(false);
+        handleCategoryEdited();
       }
 
       setLoading(false);
@@ -127,11 +99,30 @@ export default function BannerForm() {
     }
   };
   return (
-    <>
-      <div className="w-full max-w-5xl">
-        {isloading ? (
+    <Modal
+      isOpen={onOpen}
+      onClose={() => setIsOpen(false)}
+      overlayClassName="dark:bg-opacity-40 dark:backdrop-blur-lg"
+      containerClassName="dark:bg-gray-100"
+      className="z-[9999]"
+    >
+      <div className="p-4">
+        <div className="flex justify-between px-2">
+          <Title as="h4" className={cn('ml-2 font-semibold')}>
+            Edit Category
+          </Title>
+          <ActionIcon
+            variant="text"
+            onClick={() => setIsOpen(false)}
+            className={cn('h-7 w-7')}
+            rounded="full"
+          >
+            <PiXBold className="h-[18px] w-[18px]" />
+          </ActionIcon>
+        </div>
+        {isloading && onOpen ? (
           <>
-            <div className="flex h-[80vh] items-center justify-center">
+            <div className="flex h-[50vh] items-center justify-center">
               <Loader size="xl" />
             </div>
           </>
@@ -141,10 +132,6 @@ export default function BannerForm() {
             className="flex flex-col gap-x-4 gap-y-5 px-4 md:grid md:grid-cols-2 lg:gap-5"
           >
             <>
-              <Text className="col-span-2 py-3 text-2xl font-bold text-gray-700">
-                Banner Details
-              </Text>
-
               <FormGroup
                 title="Upload Image"
                 description="This will be displayed on category."
@@ -230,38 +217,14 @@ export default function BannerForm() {
               <Input
                 type="text"
                 size="lg"
-                label="Title"
-                placeholder="Enter the title"
+                label="Name"
+                placeholder="Enter the name"
                 className="font-medium"
                 inputClassName="text-sm"
-                {...register('title', {
-                  required: 'Title is required',
+                {...register('name', {
+                  required: 'Name is required',
                 })}
-                error={errors.title?.message}
-              />
-              <Select
-                label="Type"
-                size="lg"
-                options={[
-                  { label: 'Homepage', value: 'homepage' },
-                  { label: 'Category ', value: 'category' },
-                ]}
-                value={selectedType}
-                onChange={(selectedOption: any) =>
-                  setSelectedType(selectedOption)
-                }
-              />
-              <Input
-                type="text"
-                size="lg"
-                label="URL"
-                placeholder="Enter the url"
-                className="font-medium"
-                inputClassName="text-sm"
-                {...register('url', {
-                  required: 'URL is required',
-                })}
-                error={errors.url?.message}
+                error={errors.name?.message}
               />
               <Input
                 type="number"
@@ -275,6 +238,7 @@ export default function BannerForm() {
                 })}
                 error={errors.sequence?.message}
               />
+
             </>
 
             <Button
@@ -282,14 +246,16 @@ export default function BannerForm() {
               isLoading={loading}
               size="lg"
               type="submit"
-              className="col-span-2 mb-14 mt-2"
+              className="col-span-2 mb-4 mt-2"
             >
-              <span>{isEdit ? 'Update' : 'Submit'}</span>
+              <span>{null ? 'Update' : 'Submit'}</span>
               <PiArrowRightBold className="ms-2 mt-0.5 h-5 w-5" />
             </Button>
           </form>
         )}
       </div>
-    </>
+    </Modal >
   );
 }
+
+export default EditCategory;

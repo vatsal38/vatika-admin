@@ -3,12 +3,13 @@ import { metaObject } from '@/config/site.config';
 import TableLayout from './components/table-layout';
 import { getColumns } from './components/category-columns';
 import React, { useEffect, useState } from 'react';
-import ViewAdminData from './components/view-category';
 import Spinner from '@/components/ui/spinner';
 import SelectTable from '@/components/controlled-table/selectTable';
 import { Modal } from 'rizzui';
 import { CallAllCategory, CallDeleteCategory } from '@/_ServerActions';
 import toast from 'react-hot-toast';
+import { useDrawer } from '../../drawer-views/use-drawer';
+import ViewCategoryData from './components/view-category';
 
 export const metadata = {
   ...metaObject('Category List'),
@@ -24,10 +25,12 @@ const pageHeader = {
 };
 
 export default function CategoryListTable() {
+  const { openDrawer, closeDrawer } = useDrawer();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const [categoryList, setCategoryList] = useState([]);
+  console.log('categoryList::: ', categoryList);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const handleViewCategory = (Data: any) => {
@@ -91,6 +94,8 @@ export default function CategoryListTable() {
               getColumns({
                 ...columns,
                 isDeleting,
+                openDrawer: openDrawer,
+                closeDrawer: closeDrawer,
                 onViewCategory: handleViewCategory,
                 data: categoryList,
                 onDeleteItem: handleDeleteCategory,
@@ -103,7 +108,7 @@ export default function CategoryListTable() {
           />
           {selectedCategory && (
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-              <ViewAdminData data={selectedCategory} />
+              <ViewCategoryData data={selectedCategory} />
             </Modal>
           )}
         </>
