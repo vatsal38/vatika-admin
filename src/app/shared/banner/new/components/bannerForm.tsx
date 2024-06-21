@@ -78,7 +78,7 @@ export default function BannerForm() {
         bannerData.append('title', data.title);
         bannerData.append('type', selectedType?.value);
         bannerData.append('sequence', data.sequence);
-        bannerData.append('sequence', data.url);
+        bannerData.append('url', data.url);
         if (imageFile) {
           bannerData.append('image', imageFile);
         }
@@ -97,7 +97,7 @@ export default function BannerForm() {
         bannerData.append('title', data.title);
         bannerData.append('type', selectedType?.value);
         bannerData.append('sequence', data.sequence);
-        bannerData.append('sequence', data.url);
+        bannerData.append('url', data.url);
         if (imageFile) {
           bannerData.append('image', imageFile);
         }
