@@ -238,7 +238,6 @@ function EditCategory({
                 })}
                 error={errors.sequence?.message}
               />
-
             </>
 
             <Button

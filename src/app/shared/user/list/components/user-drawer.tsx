@@ -36,7 +36,7 @@ export default function UserDrawer({ userId }: any) {
             <div className="mt-8 flex justify-center">
               <Loader size="xl" />
             </div>
-          ) : (
+          ) : orderData?.length !== 0 ? (
             orderData?.map((item: any, index: any) => (
               <OrderCard
                 key={index}
@@ -44,7 +44,9 @@ export default function UserDrawer({ userId }: any) {
                 className="min-w-[273px] hover:-translate-y-0 hover:shadow-none"
               />
             ))
-          )}
+          ) :
+            <div>No data found</div>
+          }
         </div>
       </SimpleBar>
     </>

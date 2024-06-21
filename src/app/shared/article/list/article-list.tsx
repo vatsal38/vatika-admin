@@ -9,7 +9,6 @@ import SelectTable from '@/components/controlled-table/selectTable';
 import { Modal } from 'rizzui';
 import {
   CallAllArticle,
-  CallAllCategory,
   CallDeleteArticle,
 } from '@/_ServerActions';
 import toast from 'react-hot-toast';

@@ -27,7 +27,7 @@ export default function CategoryCard({
         <div className="flex gap-6">
           <img
             className="h-[100px] w-[100px] rounded-xl"
-            src={item?.image}
+            src={item?.image_url}
           />
           <div className="space-y-2">
             <p>

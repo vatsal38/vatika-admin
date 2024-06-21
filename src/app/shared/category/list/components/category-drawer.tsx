@@ -7,7 +7,6 @@ import { CallGetCategoryById } from '@/_ServerActions';
 import CategoryCard from './category-card';
 
 export default function CategoryDrawer({ categoryId }: any) {
-  const [isOpen, setIsOpen] = useState<any>(false);
   const [subCategoryData, setSubCategoryData] = useState<any>([]);
   const [isloading, setIsLoading] = useState(false);
 
@@ -15,7 +14,7 @@ export default function CategoryDrawer({ categoryId }: any) {
     try {
       setIsLoading(true);
       const { data } = (await CallGetCategoryById(categoryId)) as any;
-      console.log('getCategoryById::: ', data);
+
       if (data?.message === 'Success') {
         setSubCategoryData(data?.data?.sub_category);
         setIsLoading(false);
