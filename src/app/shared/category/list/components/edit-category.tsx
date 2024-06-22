@@ -1,4 +1,5 @@
 import {
+  CallAllCategory,
   CallGetCategoryById,
   CallUpdateCategory,
 } from '@/_ServerActions';
@@ -8,7 +9,15 @@ import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { PiArrowRightBold, PiXBold } from 'react-icons/pi';
-import { ActionIcon, Button, Input, Loader, Modal, Title } from 'rizzui';
+import {
+  ActionIcon,
+  Button,
+  Input,
+  Loader,
+  Modal,
+  Select,
+  Title,
+} from 'rizzui';
 
 type FormDataList = {
   name: string;
@@ -28,6 +37,8 @@ function EditCategory({
   const [isloading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<any>(null);
   const [imagePreview, setImagePreview] = useState<any>(null);
+  const [categoryList, setCategoryList] = useState([]);
+  const [parentCategoryId, setParentCategoryId] = useState<any>();
 
   const {
     register,
@@ -44,9 +55,11 @@ function EditCategory({
     try {
       setIsLoading(true);
       const { data } = (await CallGetCategoryById(categoryId)) as any;
+      console.log('data::: ', data);
       if (data?.message === 'Success') {
         setValue('name', data?.data?.name);
         setValue('sequence', data?.data?.sequence);
+        setParentCategoryId(data?.data?.parent_category_id);
         setImagePreview(data?.data?.image_url);
         setIsLoading(false);
       }
@@ -55,10 +68,25 @@ function EditCategory({
     }
   };
 
+  const listCategory = async () => {
+    try {
+      setIsLoading(true);
+      const { data: response } = (await CallAllCategory()) as any;
+      if (response) {
+        setCategoryList(response?.data);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+    }
+  };
+
   useEffect(() => {
+    listCategory();
+  }, []);
 
+  useEffect(() => {
     getCategoryById();
-
   }, [onOpen]);
 
   const onSubmit: SubmitHandler<FormDataList> = async (data) => {
@@ -70,6 +98,9 @@ function EditCategory({
       CategoryData.append('sequence', data?.sequence);
       if (imageFile) {
         CategoryData.append('image', imageFile);
+      }
+      if (parentCategoryId) {
+        CategoryData.append('parent_category_id', parentCategoryId?._id);
       }
       const { data: response } = (await CallUpdateCategory(
         CategoryData,
@@ -92,6 +123,14 @@ function EditCategory({
 
   const handleLogoChange = (e: any) => {
     if (e.target.files.length > 0) {
+      const fileType = e.target.files[0].type;
+      const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+      if (!validImageTypes.includes(fileType)) {
+        toast.error('Only JPG, JPEG, and PNG formats are allowed.');
+        return;
+      }
+
       setImageFile(e.target.files[0]);
       setImagePreview(URL.createObjectURL(e.target.files[0]));
     } else {
@@ -200,14 +239,21 @@ function EditCategory({
                             </p>
                           </div>
                           <input
-                            {...register('image')}
+                            {...register('image', {
+                              required: 'Image is required',
+                            })}
                             id="dropzone-file-logo"
-                            type="file"
+                            type={'file'}
                             className="hidden"
                             accept="image/*"
                             onChange={handleLogoChange}
                           />
                         </label>
+                      </div>
+                    )}
+                    {errors.image?.message && (
+                      <div className="font-medium text-red-500">
+                        {errors.image?.message as any}
                       </div>
                     )}
                   </div>
@@ -238,6 +284,19 @@ function EditCategory({
                 })}
                 error={errors.sequence?.message}
               />
+
+              <Select
+                label="Parent Category Type (Optional)"
+                placeholder={'Select a parent category type'}
+                options={categoryList}
+                getOptionDisplayValue={(option: any) => option?.name}
+                onChange={(selectedOption: any) =>
+                  setParentCategoryId(selectedOption)
+                }
+                value={parentCategoryId}
+                size="lg"
+                className="col-span-2 font-medium"
+              />
             </>
 
             <Button
@@ -253,7 +312,7 @@ function EditCategory({
           </form>
         )}
       </div>
-    </Modal >
+    </Modal>
   );
 }
 

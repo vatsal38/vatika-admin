@@ -46,6 +46,7 @@ export default function OrderListTable() {
     try {
       setIsLoading(true);
       const { data: response } = (await CallAllOrder()) as any;
+      console.log('response::: ', response);
       if (response) {
         setOrderList(response?.data);
         setIsLoading(false);

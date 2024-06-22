@@ -1,5 +1,4 @@
 import cn from '@/utils/class-names';
-import { useState } from 'react';
 
 export default function OrderCard({
   item,
@@ -8,7 +7,6 @@ export default function OrderCard({
   item: any;
   className?: string;
 }) {
-  const [isOpen, setIsOpen] = useState<any>(false);
   return (
     <div
       className={cn(
@@ -23,6 +21,12 @@ export default function OrderCard({
             src={item?.image_url}
           /> */}
           <div className="space-y-2">
+            <div>
+              <p className="font-semibold">Products</p> :{' '}
+              {item?.products?.map((i: any, index: any) => (
+                <p key={index}>{i?.name}</p>
+              ))}
+            </div>
             <p>
               <span className="font-semibold">Payment Id</span> :{' '}
               {item?.payment_id}

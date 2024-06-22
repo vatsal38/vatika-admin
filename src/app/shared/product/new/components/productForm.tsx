@@ -35,6 +35,9 @@ type FormDataList = {
   sequence: string;
   mrp: string;
   price: string;
+  size: string;
+  color: string;
+  category: string;
 };
 
 export default function ProductForm() {
@@ -47,8 +50,8 @@ export default function ProductForm() {
   const [isCategoryloading, setIsCategoryLoading] = useState(false);
   const [selectedType, setSelectedType] = useState<any>();
   const [categoryList, setCategoryList] = useState([]);
-  const [categoryId, setCategoryId] = useState<any>();
-  const [subCategoryId, setSubCategoryId] = useState<any>();
+  const [categoryId, setCategoryId] = useState<any>(null);
+  const [subCategoryId, setSubCategoryId] = useState<any>(null);
   const [imageFile, setImageFile] = useState<any>(null);
   const [imagePreview, setImagePreview] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<any>();
@@ -68,6 +71,7 @@ export default function ProductForm() {
     try {
       setIsLoading(true);
       const { data } = (await CallGetProductById(productId)) as any;
+      console.log('pdata::: ', data);
 
       if (data?.message === 'Success') {
         const label = data?.data?.type === 'single' ? 'Single' : 'Multiple';
@@ -75,13 +79,25 @@ export default function ProductForm() {
         setValue('name', data?.data?.name);
         setValue('sequence', data?.data?.sequence);
         setValue('short_description', data?.data?.short_description);
-        setSubCategoryId(data?.data?.category);
+        if (data?.data?.category?.parent_category_id) {
+          setCategoryId(data?.data?.category?.parent_category_id);
+          setSubCategoryId(data?.data?.category);
+        } else {
+          setCategoryId(data?.data?.category);
+          setSubCategoryId(null);
+        }
         setSelectedType({ label: label, value: type });
         if (data?.data?.mrp) {
           setValue('mrp', data?.data?.mrp);
         }
         if (data?.data?.price) {
           setValue('price', data?.data?.price);
+        }
+        if (data?.data?.size) {
+          setValue('size', data?.data?.size);
+        }
+        if (data?.data?.colour) {
+          setValue('color', data?.data?.colour);
         }
         setImagePreview(data?.data?.image_url);
         setIsLoading(false);
@@ -127,7 +143,10 @@ export default function ProductForm() {
         productData.append('name', data.name);
         productData.append('sequence', data.sequence);
         productData.append('short_description', data.short_description);
-        productData.append('category', subCategoryId?._id ? subCategoryId?._id : categoryId?._id);
+        productData.append(
+          'category',
+          subCategoryId?._id ? subCategoryId?._id : categoryId?._id
+        );
 
         productData.append('type', selectedType?.value);
         if (data.mrp) {
@@ -135,6 +154,12 @@ export default function ProductForm() {
         }
         if (data.price) {
           productData.append('price', data.price);
+        }
+        if (data.size) {
+          productData.append('size', data.size);
+        }
+        if (data.color) {
+          productData.append('colour', data.color);
         }
         if (imageFile) {
           productData.append('image', imageFile);
@@ -163,7 +188,12 @@ export default function ProductForm() {
         if (data.price) {
           productData.append('price', data.price);
         }
-
+        if (data.size) {
+          productData.append('size', data.size);
+        }
+        if (data.color) {
+          productData.append('colour', data.color);
+        }
         if (imageFile) {
           productData.append('image', imageFile);
         }
@@ -188,18 +218,20 @@ export default function ProductForm() {
 
   const handleLogoChange = (e: any) => {
     if (e.target.files.length > 0) {
+      const fileType = e.target.files[0].type;
+      const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+      if (!validImageTypes.includes(fileType)) {
+        toast.error('Only JPG, JPEG, and PNG formats are allowed.');
+        return;
+      }
+
       setImageFile(e.target.files[0]);
       setImagePreview(URL.createObjectURL(e.target.files[0]));
     } else {
       setImagePreview(null);
     }
   };
-
-  useEffect(() => {
-    if (categoryId?.sub_category?.length !== 0 && !isCategoryloading) {
-      setSubCategoryId(null)
-    }
-  }, [categoryId, isCategoryloading])
 
   return (
     <>
@@ -288,14 +320,21 @@ export default function ProductForm() {
                             </p>
                           </div>
                           <input
-                            {...register('image')}
+                            {...register('image', {
+                              required: 'Image is required',
+                            })}
                             id="dropzone-file-logo"
-                            type="file"
+                            type={'file'}
                             className="hidden"
                             accept="image/*"
                             onChange={handleLogoChange}
                           />
                         </label>
+                      </div>
+                    )}
+                    {errors.image?.message && (
+                      <div className="font-medium text-red-500">
+                        {errors.image?.message as any}
                       </div>
                     )}
                   </div>
@@ -343,11 +382,15 @@ export default function ProductForm() {
                   { label: 'Single', value: 'single' },
                   { label: 'Multiple', value: 'multiple' },
                 ]}
+                {...register('type', {
+                  required: 'Type is required',
+                })}
                 onChange={(selectedOption: any) =>
                   setSelectedType(selectedOption)
                 }
                 value={selectedType}
                 size="lg"
+                error={errors.type?.message}
               />
 
               <Select
@@ -355,23 +398,31 @@ export default function ProductForm() {
                 placeholder={'Select a category'}
                 options={categoryList}
                 getOptionDisplayValue={(option: any) => option?.name}
+                {...register('category', {
+                  required: 'Category is required',
+                })}
                 onChange={(selectedOption: any) =>
                   setCategoryId(selectedOption)
                 }
                 value={categoryId}
                 size="lg"
+                error={errors.category?.message}
               />
-              {categoryId?.sub_category?.length !== 0 && <Select
-                label="Sub Category"
-                placeholder={'Select a sub category'}
-                options={categoryId?.sub_category}
-                getOptionDisplayValue={(option: any) => option?.name}
-                onChange={(selectedOption: any) =>
-                  setSubCategoryId(selectedOption)
-                }
-                value={subCategoryId}
-                size="lg"
-              />}
+              {((categoryId?.sub_category !== undefined &&
+                categoryId?.sub_category?.length !== 0) ||
+                subCategoryId) && (
+                <Select
+                  label="Sub Category"
+                  placeholder={'Select a sub category'}
+                  options={categoryId?.sub_category}
+                  getOptionDisplayValue={(option: any) => option?.name}
+                  onChange={(selectedOption: any) =>
+                    setSubCategoryId(selectedOption)
+                  }
+                  value={subCategoryId}
+                  size="lg"
+                />
+              )}
 
               {selectedType?.value === 'single' && (
                 <>
@@ -398,6 +449,30 @@ export default function ProductForm() {
                       required: 'Price is required',
                     })}
                     error={errors.price?.message}
+                  />
+                  <Input
+                    type="text"
+                    size="lg"
+                    label="Size"
+                    placeholder="Enter size"
+                    className="font-medium"
+                    inputClassName="text-sm"
+                    {...register('size', {
+                      required: 'Size is required',
+                    })}
+                    error={errors.size?.message}
+                  />
+                  <Input
+                    type="text"
+                    size="lg"
+                    label="Color (Hex Code Format)"
+                    placeholder="Enter color"
+                    className="font-medium"
+                    inputClassName="text-sm"
+                    {...register('color', {
+                      required: 'Color is required',
+                    })}
+                    error={errors.color?.message}
                   />
                 </>
               )}

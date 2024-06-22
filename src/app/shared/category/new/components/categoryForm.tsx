@@ -61,6 +61,7 @@ export default function CategoryForm() {
       if (data?.message === 'Success') {
         setValue('name', data?.data?.name);
         setValue('sequence', data?.data?.sequence);
+        setParentCategoryId(data?.data?.parent_category_id);
         setImagePreview(data?.data?.image_url);
         setIsLoading(false);
       }
@@ -145,6 +146,14 @@ export default function CategoryForm() {
 
   const handleLogoChange = (e: any) => {
     if (e.target.files.length > 0) {
+      const fileType = e.target.files[0].type;
+      const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+      if (!validImageTypes.includes(fileType)) {
+        toast.error('Only JPG, JPEG, and PNG formats are allowed.');
+        return;
+      }
+
       setImageFile(e.target.files[0]);
       setImagePreview(URL.createObjectURL(e.target.files[0]));
     } else {
@@ -239,14 +248,21 @@ export default function CategoryForm() {
                             </p>
                           </div>
                           <input
-                            {...register('image')}
+                            {...register('image', {
+                              required: 'Image is required',
+                            })}
                             id="dropzone-file-logo"
-                            type="file"
+                            type={'file'}
                             className="hidden"
                             accept="image/*"
                             onChange={handleLogoChange}
                           />
                         </label>
+                      </div>
+                    )}
+                    {errors.image?.message && (
+                      <div className="font-medium text-red-500">
+                        {errors.image?.message as any}
                       </div>
                     )}
                   </div>
@@ -280,8 +296,8 @@ export default function CategoryForm() {
             </>
 
             <Select
-              label="Type"
-              placeholder={'Select a type'}
+              label="Parent Category Type (Optional)"
+              placeholder={'Select a parent category type'}
               options={categoryList}
               getOptionDisplayValue={(option: any) => option?.name}
               onChange={(selectedOption: any) =>

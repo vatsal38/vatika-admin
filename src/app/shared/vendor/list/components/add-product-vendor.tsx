@@ -40,7 +40,6 @@ function AddProductVendor({
 }: any) {
   const [loading, setLoading] = useState(false);
   const [isProductloading, setIsProductLoading] = useState(false);
-  const [isloading, setIsLoading] = useState(false);
   const [productList, setProductList] = useState<any>([]);
   const [selectedPincode, setSelectedPincode] = useState<any>([]);
   const [productId, setProductId] = useState<any>();
@@ -100,7 +99,6 @@ function AddProductVendor({
           existingData,
           item?._id
         )) as any;
-        console.log('response123::: ', response);
         if (response) {
           toast.success(response?.message);
           reset();
@@ -130,7 +128,6 @@ function AddProductVendor({
       setLoading(false);
     }
   };
-
   return (
     <Modal
       isOpen={onOpen}
@@ -154,39 +151,36 @@ function AddProductVendor({
           </ActionIcon>
         </div>
         {isProductloading && onOpen ? (
-          <>
-            <div className="flex h-[50vh] items-center justify-center">
-              <Loader size="xl" />
-            </div>
-          </>
+          <div className="flex h-[50vh] items-center justify-center">
+            <Loader size="xl" />
+          </div>
         ) : (
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="mt-4 flex flex-col gap-x-4 gap-y-5 px-4 lg:gap-5"
+            className="mt-4 flex flex-col gap-x-12 gap-y-5 px-4 pt-6 lg:gap-5"
           >
-            <>
-              <div className="space-y-1.5">
-                <Text className="font-semibold">Pincode</Text>
-                <Select
-                  value={selectedPincode}
-                  onChange={(selected) => setSelectedPincode(selected)}
-                  isMulti
-                  options={pincodeList?.map((item: any) => {
-                    return { value: item, label: item };
-                  })}
-                />
-              </div>
-              <Dropdown
-                label="Product"
+            <div className="space-y-1.5">
+              <Text className="font-semibold">Pincode</Text>
+              <Select
+                value={selectedPincode}
+                onChange={(selected) => setSelectedPincode(selected)}
+                isMulti
+                options={pincodeList?.map((item: any) => {
+                  return { value: item, label: item };
+                })}
+              />
+            </div>
+            <div className="mb-6 mt-2 space-y-1.5">
+              <Text className="font-semibold">Product</Text>
+              <Select
                 placeholder={'Select the product'}
-                options={productList}
-                getOptionDisplayValue={(option: any) => option?.name}
+                options={productList?.map((item: any) => {
+                  return { value: item?._id, label: item?.name };
+                })}
                 onChange={(selectedOption: any) => setProductId(selectedOption)}
                 value={productId}
-                size="lg"
-                dropdownClassName="z-[9999]"
               />
-            </>
+            </div>
 
             <Button
               disabled={loading}

@@ -127,7 +127,7 @@ export const getColumns = ({
             description={`Are you sure you want to delete the "${row?.title}"?`}
             onDelete={() => onDeleteItem(row?._id)}
           /> */}
-          <Tooltip size="sm" content="Orders" placement="top" color="invert">
+          {/* <Tooltip size="sm" content="Orders" placement="top" color="invert">
             <div className="flex items-center justify-end gap-3 pe-4">
               <Button
                 variant="outline"
@@ -148,7 +148,7 @@ export const getColumns = ({
                 Orders
               </Button>
             </div>
-          </Tooltip>
+          </Tooltip> */}
         </div>
       ),
     },

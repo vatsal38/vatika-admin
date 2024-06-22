@@ -1513,6 +1513,10 @@ div[style='z-index: 1000001;'],
   border: #e9edff !important;
 }
 
+.react-tagsinput--focused {
+  border-color: rgb(238, 238, 238) !important;
+}
+
 .css-1nmdiq5-menu {
   z-index: 9999px !important;
 }

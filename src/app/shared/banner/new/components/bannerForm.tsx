@@ -20,7 +20,7 @@ type FormDataList = {
   email: string;
   image: any;
   sequence: string;
-  url: string
+  url: string;
 };
 
 export default function BannerForm() {
@@ -120,6 +120,14 @@ export default function BannerForm() {
 
   const handleLogoChange = (e: any) => {
     if (e.target.files.length > 0) {
+      const fileType = e.target.files[0].type;
+      const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+      if (!validImageTypes.includes(fileType)) {
+        toast.error('Only JPG, JPEG, and PNG formats are allowed.');
+        return;
+      }
+
       setImageFile(e.target.files[0]);
       setImagePreview(URL.createObjectURL(e.target.files[0]));
     } else {
@@ -213,14 +221,21 @@ export default function BannerForm() {
                             </p>
                           </div>
                           <input
-                            {...register('image')}
+                            {...register('image', {
+                              required: 'Image is required',
+                            })}
                             id="dropzone-file-logo"
-                            type="file"
+                            type={'file'}
                             className="hidden"
                             accept="image/*"
                             onChange={handleLogoChange}
                           />
                         </label>
+                      </div>
+                    )}
+                    {errors.image?.message && (
+                      <div className="font-medium text-red-500">
+                        {errors.image?.message as any}
                       </div>
                     )}
                   </div>
@@ -247,9 +262,13 @@ export default function BannerForm() {
                   { label: 'Category ', value: 'category' },
                 ]}
                 value={selectedType}
+                {...register('type', {
+                  required: 'Type is required',
+                })}
                 onChange={(selectedOption: any) =>
                   setSelectedType(selectedOption)
                 }
+                error={errors.type?.message}
               />
               <Input
                 type="text"

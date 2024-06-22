@@ -36,7 +36,7 @@ export default function ProductDrawer({ productId }: any) {
 
   return (
     <>
-      <SimpleBar className="h-[calc(100%-138px)] p-4">
+      <SimpleBar className="h-[calc(100%-38px)] p-4">
         <Button
           variant="outline"
           className="my-2 mr-2 flex w-32 items-center justify-start p-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"

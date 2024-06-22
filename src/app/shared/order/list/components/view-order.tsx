@@ -18,6 +18,16 @@ export default function ViewOrderData({ data }: { data: any }) {
         <div className="mx-auto w-full max-w-[1294px] p-4 py-8 @container @5xl:mt-0 @5xl:pt-4 sm:flex sm:justify-between">
           <div className="grid w-full gap-7 @2xl:gap-9 @3xl:gap-11">
             <FormGroup
+              title="Products"
+              className="flex justify-between pt-5 @2xl:pt-7 @3xl:grid-cols-12 @3xl:pt-9"
+            >
+              {data?.products?.map((i: any, index: any) =>
+                <div key={index} className='w-56 flex gap-2'>
+                  <div>{index + 1}. </div>
+                  <div>{i?.product?.name}</div>
+                </div>)}
+            </FormGroup>
+            <FormGroup
               title="Payment Id"
               className="flex justify-between pt-5 @2xl:pt-7 @3xl:grid-cols-12 @3xl:pt-9"
             >

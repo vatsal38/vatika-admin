@@ -34,7 +34,7 @@ export default function CategoryDrawer({ categoryId }: any) {
 
   return (
     <>
-      <SimpleBar className="h-[calc(100%-138px)] p-4">
+      <SimpleBar className="h-[calc(100%-38px)] p-4">
         <div className="space-y-2">
           {isloading ? (
             <div className="mt-8 flex justify-center">

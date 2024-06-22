@@ -27,6 +27,7 @@ type FormDataList = {
   state: string;
   city: string;
   address_pincode: string;
+  pincode: string;
 };
 
 export default function VendorForm() {
@@ -142,6 +143,14 @@ export default function VendorForm() {
 
   const handleLogoChange = (e: any) => {
     if (e.target.files.length > 0) {
+      const fileType = e.target.files[0].type;
+      const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+      if (!validImageTypes.includes(fileType)) {
+        toast.error('Only JPG, JPEG, and PNG formats are allowed.');
+        return;
+      }
+
       setImageFile(e.target.files[0]);
       setImagePreview(URL.createObjectURL(e.target.files[0]));
     } else {
@@ -235,14 +244,21 @@ export default function VendorForm() {
                             </p>
                           </div>
                           <input
-                            {...register('image')}
+                            {...register('image', {
+                              required: 'Image is required',
+                            })}
                             id="dropzone-file-logo"
-                            type="file"
+                            type={'file'}
                             className="hidden"
                             accept="image/*"
                             onChange={handleLogoChange}
                           />
                         </label>
+                      </div>
+                    )}
+                    {errors.image?.message && (
+                      <div className="font-medium text-red-500">
+                        {errors.image?.message as any}
                       </div>
                     )}
                   </div>
@@ -287,7 +303,20 @@ export default function VendorForm() {
               />
               <div className="space-y-1.5">
                 <Text>Pincode</Text>
-                <TagsInput value={tags} onChange={handleChange} />
+                <TagsInput
+                  value={tags}
+                  {...register('pincode', {
+                    required: 'Pincode is required',
+                  })}
+                  onChange={handleChange}
+                  inputValue="Enter pincode"
+                  className={`${
+                    errors.pincode?.message
+                      ? 'border-[2px] border-solid border-red-500'
+                      : 'border-[2px] border-solid border-gray-200'
+                  } rounded-md py-0.5 px-2 focus:border-gray-200`}
+                />
+                <p className="text-red-500">{errors.pincode?.message}</p>
               </div>
 
               <Textarea

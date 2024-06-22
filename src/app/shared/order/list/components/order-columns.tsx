@@ -9,6 +9,7 @@ import DateCell from '@/components/ui/date-cell';
 import DeletePopover from '@/app/shared/delete-popover';
 import { PiEnvelopeSimple } from 'react-icons/pi';
 import { ActionIcon, Badge, Text, Tooltip } from 'rizzui';
+import { HiOutlineInformationCircle } from 'react-icons/hi';
 
 type Columns = {
   data: any[];
@@ -57,14 +58,14 @@ export const getColumns = ({
     title: <HeaderCell title="Amount" />,
     dataIndex: 'amount',
     key: 'amount',
-    width: 200,
+    width: 160,
     render: (value: any) => <Text>{value}</Text>,
   },
   {
     title: <HeaderCell title="Total Amount" />,
     dataIndex: 'total_amount',
     key: 'total_amount',
-    width: 200,
+    width: 160,
     render: (value: any) => <Text>{value}</Text>,
   },
   {
@@ -80,8 +81,41 @@ export const getColumns = ({
     onHeaderCell: () => onHeaderCellClick('created_at'),
     dataIndex: 'created_at',
     key: 'created_at',
-    width: 160,
+    width: 260,
     render: (value: Date) => <DateCell date={value} />,
+  },
+  {
+    title: <HeaderCell title="Products" />,
+    dataIndex: 'products',
+    key: 'products',
+    width: 160,
+    render: (value: any) => {
+      return (
+        <Tooltip
+          size="sm"
+          content={
+            <div className="space-y-1">
+              {value.map((i: any, index: any) => (
+                <Text className="font-semibold" key={index}>
+                  {index + 1}. {i?.product?.name}
+                </Text>
+              ))}
+            </div>
+          }
+          placement="top"
+          color="invert"
+        >
+          <ActionIcon
+            as="span"
+            size="sm"
+            variant="outline"
+            className="hover:text-gray-700"
+          >
+            <HiOutlineInformationCircle className="h-4 w-4" />
+          </ActionIcon>
+        </Tooltip>
+      );
+    },
   },
   {
     title: <HeaderCell title="Actions" className="opacity-0" />,
@@ -107,7 +141,7 @@ export const getColumns = ({
             </ActionIcon>
           </Link>
         </Tooltip> */}
-        <Tooltip
+        {/* <Tooltip
           size="sm"
           content={'View Banner'}
           placement="top"
@@ -122,7 +156,7 @@ export const getColumns = ({
           >
             <EyeIcon className="h-4 w-4" />
           </ActionIcon>
-        </Tooltip>
+        </Tooltip> */}
 
         {/* <DeletePopover
           title={`Delete Banner`}
