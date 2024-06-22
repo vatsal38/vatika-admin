@@ -150,3 +150,9 @@ export const CallAllUserOrder = (id) =>
 
 export const CallAllOrder = () =>
   generateServerAction(DataService.AllOrder, true);
+
+export const CallOrderById = (id) =>
+  generateServerAction(DataService.AllOrderById, true, id);
+
+export const CallUpdateOrderManage = (data, id) =>
+  generateServerAction(DataService.UpdateOrderManage, true, data, id);

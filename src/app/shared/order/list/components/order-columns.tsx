@@ -8,7 +8,7 @@ import TableAvatar from '@/components/ui/avatar-card';
 import DateCell from '@/components/ui/date-cell';
 import DeletePopover from '@/app/shared/delete-popover';
 import { PiEnvelopeSimple } from 'react-icons/pi';
-import { ActionIcon, Badge, Text, Tooltip } from 'rizzui';
+import { ActionIcon, Badge, Button, Text, Tooltip } from 'rizzui';
 import { HiOutlineInformationCircle } from 'react-icons/hi';
 
 type Columns = {
@@ -157,6 +157,18 @@ export const getColumns = ({
             <EyeIcon className="h-4 w-4" />
           </ActionIcon>
         </Tooltip> */}
+        <Tooltip size="sm" content="Manage" placement="top" color="invert">
+          <div className="flex items-center justify-end gap-3 pe-4">
+            <Link href={`/order/${row?._id}/manage`}>
+              <Button
+                variant="outline"
+                className="mr-2 flex w-32 items-center justify-center p-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
+              >
+                Manage Orders
+              </Button>
+            </Link>
+          </div>
+        </Tooltip>
 
         {/* <DeletePopover
           title={`Delete Banner`}

@@ -34,6 +34,7 @@ export default function ProductVendorCard({
           </div>
           <div className="w-44">
             <p className="font-semibold">{item?.product_id?.name}</p>
+            <p className="mt-2 font-semibold">Quantity : {item?.quantity}</p>
             <p className="pb-1 pt-3 font-semibold">Pincodes</p>
             <div className="grid grid-cols-2 gap-3">
               {item?.pincode?.map((item: any, index: any) => (

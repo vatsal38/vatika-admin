@@ -54,7 +54,6 @@ export default function ProductForm() {
   const [subCategoryId, setSubCategoryId] = useState<any>(null);
   const [imageFile, setImageFile] = useState<any>(null);
   const [imagePreview, setImagePreview] = useState<any>(null);
-  const [errorMsg, setErrorMsg] = useState<any>();
   const {
     register,
     watch,
@@ -71,7 +70,6 @@ export default function ProductForm() {
     try {
       setIsLoading(true);
       const { data } = (await CallGetProductById(productId)) as any;
-      console.log('pdata::: ', data);
 
       if (data?.message === 'Success') {
         const label = data?.data?.type === 'single' ? 'Single' : 'Multiple';
@@ -132,13 +130,10 @@ export default function ProductForm() {
   }, [categoryId]);
 
   const onSubmit: SubmitHandler<FormDataList> = async (data) => {
+    console.log('::: ');
     try {
       setLoading(true);
       if (isEdit) {
-        if (!selectedType?.value) {
-          setErrorMsg('This field is required');
-          return;
-        }
         const productData = new FormData();
         productData.append('name', data.name);
         productData.append('sequence', data.sequence);
@@ -207,7 +202,6 @@ export default function ProductForm() {
           route.push('/product');
         }
       }
-
       setLoading(false);
     } catch (error: any) {
       console.log('error::: ', error);
@@ -382,9 +376,9 @@ export default function ProductForm() {
                   { label: 'Single', value: 'single' },
                   { label: 'Multiple', value: 'multiple' },
                 ]}
-                {...register('type', {
-                  required: 'Type is required',
-                })}
+                // {...register('type', {
+                //   required: 'Type is required',
+                // })}
                 onChange={(selectedOption: any) =>
                   setSelectedType(selectedOption)
                 }
@@ -398,9 +392,9 @@ export default function ProductForm() {
                 placeholder={'Select a category'}
                 options={categoryList}
                 getOptionDisplayValue={(option: any) => option?.name}
-                {...register('category', {
-                  required: 'Category is required',
-                })}
+                // {...register('category', {
+                //   required: 'Category is required',
+                // })}
                 onChange={(selectedOption: any) =>
                   setCategoryId(selectedOption)
                 }

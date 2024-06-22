@@ -33,7 +33,7 @@ export default function ProductDrawer({ productId }: any) {
   const handleVariantAdded = () => {
     getProductById();
   };
-
+  console.log('variantData::: ', variantData);
   return (
     <>
       <SimpleBar className="h-[calc(100%-38px)] p-4">

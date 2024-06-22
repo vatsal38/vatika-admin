@@ -99,3 +99,13 @@ export const permissionDrawerData: any = [
     icon: <IoSettings />,
   },
 ];
+
+export const statusData = [
+  { label: 'Order Confirmed', value: 'Order Confirmed' },
+  { label: 'In Process', value: 'In Process' },
+  { label: 'Order Dispatched', value: 'Order Dispatched' },
+  { label: 'Out for Delivery', value: 'Out for Delivery' },
+  { label: 'Order Delivered', value: 'Order Delivered' },
+  { label: 'Cancelled', value: 'Cancelled' },
+  { label: 'Active', value: 'ACTIVE' },
+];

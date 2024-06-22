@@ -18,6 +18,7 @@ import {
   Select as Dropdown,
   Title,
   Text,
+  Input,
 } from 'rizzui';
 import Select from 'react-select';
 
@@ -27,6 +28,7 @@ type FormDataList = {
   price: string;
   colour: string;
   size: string;
+  quantity: string;
 };
 
 function AddProductVendor({
@@ -66,14 +68,16 @@ function AddProductVendor({
       console.error('Login error:', error);
     }
   };
-
   useEffect(() => {
     listProduct();
   }, []);
 
   useEffect(() => {
     if (isEdit) {
-      setProductId(item?.product_id);
+      setProductId({
+        label: item?.product_id?.name,
+        value: item?.product_id?._id,
+      } as any);
       setSelectedPincode(
         item?.pincode?.map((item: any) => {
           return {
@@ -82,6 +86,7 @@ function AddProductVendor({
           };
         })
       );
+      setValue('quantity', item?.quantity);
     }
   }, [onOpen]);
 
@@ -93,6 +98,7 @@ function AddProductVendor({
           product_id: productId?.id,
           vendor_id: vendorId,
           pincode: selectedPincode.map((item: any) => item.value),
+          quantity: data?.quantity,
         };
 
         const { data: response } = (await CallUpdateAttachVendorToProduct(
@@ -110,6 +116,7 @@ function AddProductVendor({
           product_id: productId?._id,
           vendor_id: vendorId,
           pincode: selectedPincode.map((item: any) => item.value),
+          quantity: data?.quantity,
         };
         const { data: response } = (await CallAttachVendorToProduct(
           dataPayload
@@ -170,7 +177,7 @@ function AddProductVendor({
                 })}
               />
             </div>
-            <div className="mb-6 mt-2 space-y-1.5">
+            <div className="mt-2 space-y-1.5">
               <Text className="font-semibold">Product</Text>
               <Select
                 placeholder={'Select the product'}
@@ -179,6 +186,20 @@ function AddProductVendor({
                 })}
                 onChange={(selectedOption: any) => setProductId(selectedOption)}
                 value={productId}
+              />
+            </div>
+            <div className="mb-6">
+              <Input
+                type="number"
+                size="lg"
+                label="Quantity"
+                placeholder="Enter quantity"
+                className="font-medium"
+                inputClassName="text-sm"
+                {...register('quantity', {
+                  required: 'Quantity is required',
+                })}
+                error={errors.quantity?.message}
               />
             </div>
 

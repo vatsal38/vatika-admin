@@ -40,7 +40,7 @@ export default function VendorDrawer({ vendorId }: any) {
   const handleAttachedProduct = () => {
     getVendorById();
   };
-
+  console.log('productData::: ', productData);
   return (
     <>
       <SimpleBar className="h-[calc(100%-38px)] p-4">

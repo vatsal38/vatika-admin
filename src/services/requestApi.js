@@ -272,6 +272,20 @@ class DataService {
       },
     });
   }
+  AllOrderById(id, token) {
+    return http.get(`order/admin/id/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+  UpdateOrderManage(data, id, token) {
+    return http.patch(`order/update/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }
 
 export default new DataService();
