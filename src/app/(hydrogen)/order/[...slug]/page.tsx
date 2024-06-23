@@ -2,7 +2,7 @@ import ManageOrderComponent from '@/app/shared/order/list/manage-order/manage-or
 import { metaObject } from '@/config/site.config';
 
 export const metadata = {
-  ...metaObject('Order MAnage'),
+  ...metaObject('Order Manage'),
 };
 
 export default function ManageOrderPage() {

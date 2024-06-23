@@ -40,7 +40,6 @@ function ManageOrderComponent() {
     try {
       setIsLoading(true);
       const { data: response } = (await CallOrderById(orderId)) as any;
-      console.log('orderData::: ', response);
       if (response) {
         setOrderData(response?.data);
         setIsLoading(false);
@@ -109,97 +108,102 @@ function ManageOrderComponent() {
             <div className="flex justify-between gap-12">
               <div className="w-full">
                 <Text className="col-span-2 py-3 text-xl font-bold text-gray-700">
-                  Contact Details
+                  Product Details
                 </Text>
-                <div
-                  className={cn(
-                    'relative max-h-[170px] w-full rounded-lg border border-muted bg-gray-0 p-5 shadow-sm transition-all hover:z-50 hover:-translate-y-1 hover:shadow-lg dark:bg-gray-50'
-                  )}
-                >
-                  <div className="space-y-2">
-                    <p>
-                      <span className="font-semibold">Contact Name</span> :{' '}
-                      {OrderData?.contact_name}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Contact Phone</span> :
-                      {OrderData?.contact_phone}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Contact Address</span> :{' '}
-                      {OrderData?.contact_address}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Pincode</span> :{' '}
-                      {OrderData?.pincode}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Total Amount</span> : ₹
-                      {OrderData?.total_amount}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="w-full">
-                <Text className="col-span-2 py-3 text-xl font-bold text-gray-700">
-                  User Details
-                </Text>
-                <div
-                  className={cn(
-                    'relative h-full max-h-[170px] w-full rounded-lg border border-muted bg-gray-0 p-5 shadow-sm transition-all hover:z-50 hover:-translate-y-1 hover:shadow-lg dark:bg-gray-50'
-                  )}
-                >
-                  <div className="space-y-2">
-                    <p>
-                      <span className="font-semibold">Name</span> :{' '}
-                      {OrderData?.user?.name}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Email</span> :{' '}
-                      {OrderData?.user?.email}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Phone</span> :{' '}
-                      {OrderData?.user?.phone}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mt-8">
-              <Text className="col-span-2 py-3 text-xl font-bold text-gray-700">
-                Product Details
-              </Text>
-              <div className="mt-4 flex gap-6">
-                {OrderData?.products?.map((item: any, index: any) => (
-                  <div
-                    className={cn(
-                      'relative rounded-lg border border-muted bg-gray-50 p-5 shadow-sm transition-all hover:z-50 hover:-translate-y-1 hover:shadow-lg dark:bg-gray-50'
-                    )}
-                    key={index}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex w-full gap-6">
-                        <div className="w-28">
-                          <img
-                            className="h-[100px] w-[100px] rounded-xl"
-                            src={item?.product?.image_url}
-                          />
-                        </div>
-                        <div className="w-56">
-                          <p className="font-semibold">{item?.product?.name}</p>
-                          <p className="mt-2 font-semibold">
-                            Quantity : {item?.quantity}
-                          </p>
-                          <p className="mt-2 font-semibold">
-                            Total Amount : {item?.quantity} ✖ {item?.amount} ={' '}
-                            {item?.total_amount}
-                          </p>
+                <div className="flex flex-col gap-6">
+                  {OrderData?.products?.map((item: any, index: any) => (
+                    <div
+                      className={cn(
+                        'relative rounded-lg border border-muted bg-gray-50 p-5 shadow-sm transition-all hover:z-50 hover:-translate-y-1 hover:shadow-lg dark:bg-gray-50'
+                      )}
+                      key={index}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex w-full gap-6">
+                          <div className="w-28">
+                            <img
+                              className="h-[100px] w-[100px] rounded-xl"
+                              src={item?.product?.image_url}
+                            />
+                          </div>
+                          <div className="w-56">
+                            <p className="font-semibold">
+                              {item?.product?.name}
+                            </p>
+                            <p className="mt-2 font-semibold">
+                              Quantity : {item?.quantity}
+                            </p>
+                            <p className="mt-2 font-semibold">
+                              Total Amount : {item?.quantity} ✖ {item?.amount}{' '}
+                              = {item?.total_amount}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex w-full flex-col gap-6">
+                <div className="w-full">
+                  <Text className="col-span-2 py-3 text-xl font-bold text-gray-700">
+                    User Details
+                  </Text>
+                  <div
+                    className={cn(
+                      'relative w-full rounded-lg border border-muted bg-gray-0 p-5 shadow-sm transition-all hover:z-50 hover:-translate-y-1 hover:shadow-lg dark:bg-gray-50'
+                    )}
+                  >
+                    <div className="space-y-2">
+                      <p>
+                        <span className="font-semibold">Name</span> :{' '}
+                        {OrderData?.user?.name}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Email</span> :{' '}
+                        {OrderData?.user?.email}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Phone</span> :{' '}
+                        {OrderData?.user?.phone}
+                      </p>
+                    </div>
                   </div>
-                ))}
+                </div>
+                <div className="w-full">
+                  <Text className="col-span-2 py-3 text-xl font-bold text-gray-700">
+                    Contact Details
+                  </Text>
+                  <div
+                    className={cn(
+                      'relative max-h-[170px] w-full rounded-lg border border-muted bg-gray-0 p-5 shadow-sm transition-all hover:z-50 hover:-translate-y-1 hover:shadow-lg dark:bg-gray-50'
+                    )}
+                  >
+                    <div className="space-y-2">
+                      <p>
+                        <span className="font-semibold">Contact Name</span> :{' '}
+                        {OrderData?.contact_name}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Contact Phone</span> :
+                        {OrderData?.contact_phone}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Contact Address</span> :{' '}
+                        {OrderData?.contact_address}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Pincode</span> :{' '}
+                        {OrderData?.pincode}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Total Amount</span> : ₹
+                        {OrderData?.total_amount}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
