@@ -63,6 +63,7 @@ export default function ProductForm() {
     setValue,
     reset,
   } = useForm<FormDataList>();
+  console.log('errors::: ', errors);
   const session: any = useSession();
   const token = session?.data?.user?.token;
 
