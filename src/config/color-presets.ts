@@ -18,14 +18,14 @@ export const presetDark = {
 
 // defaults from global css line 38
 export const DEFAULT_PRESET_COLORS = {
-  lighter: '#d7e3fe',
-  light: '#608efb',
-  default: '#3872fa',
-  dark: '#1d58d8',
+  lighter: '#d7fedb',
+  light: '#60fb7a',
+  default: '#008000',
+  dark: '#19b354',
   foreground: '#ffffff',
 };
 
-export const DEFAULT_PRESET_COLOR_NAME = 'Blue';
+export const DEFAULT_PRESET_COLOR_NAME = 'Green';
 
 export const usePresets = () => {
   const { theme } = useTheme();
