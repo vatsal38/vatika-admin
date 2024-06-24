@@ -289,7 +289,7 @@ function AddProductVariant({
               <Input
                 type="text"
                 size="lg"
-                label="Colour"
+                label="Colour (e.g #933B3B)"
                 placeholder="Enter the colour"
                 className="font-medium"
                 inputClassName="text-sm"
