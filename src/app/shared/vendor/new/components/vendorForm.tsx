@@ -305,18 +305,16 @@ export default function VendorForm() {
                 <Text>Pincode</Text>
                 <TagsInput
                   value={tags}
-                  {...register('pincode', {
-                    required: 'Pincode is required',
-                  })}
+                  // {...register('pincode', {
+                  //   required: 'Pincode is required',
+                  // })}
                   onChange={handleChange}
                   inputValue="Enter pincode"
-                  className={`${
-                    errors.pincode?.message
-                      ? 'border-[2px] border-solid border-red-500'
-                      : 'border-[2px] border-solid border-gray-200'
-                  } rounded-md py-0.5 px-2 focus:border-gray-200`}
+                  className={
+                    'rounded-md border-[2px] border-solid border-gray-200 px-2 py-0.5 focus:border-gray-200'
+                  }
                 />
-                <p className="text-red-500">{errors.pincode?.message}</p>
+                {/* <p className="text-red-500">{errors.pincode?.message}</p> */}
               </div>
 
               <Textarea
