@@ -95,7 +95,7 @@ function AddProductVendor({
       setLoading(true);
       if (isEdit) {
         const existingData = {
-          product_id: productId?.id,
+          product_id: productId?.value,
           vendor_id: vendorId,
           pincode: selectedPincode.map((item: any) => item.value),
           quantity: data?.quantity,
@@ -113,7 +113,7 @@ function AddProductVendor({
         }
       } else {
         const dataPayload = {
-          product_id: productId?._id,
+          product_id: productId?.value,
           vendor_id: vendorId,
           pincode: selectedPincode.map((item: any) => item.value),
           quantity: data?.quantity,

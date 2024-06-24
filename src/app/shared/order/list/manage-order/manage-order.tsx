@@ -95,6 +95,7 @@ function ManageOrderComponent() {
       setStatus(OrderData?.status);
     }
   }, [OrderData]);
+  console.log('OrderData::: ', OrderData);
   return (
     <>
       <Text className="col-span-2 py-3 text-2xl font-bold text-gray-700">
@@ -123,7 +124,11 @@ function ManageOrderComponent() {
                           <div className="w-28">
                             <img
                               className="h-[100px] w-[100px] rounded-xl"
-                              src={item?.product?.image_url}
+                              src={
+                                item?.product_variant
+                                  ? item?.product_variant?.image_url
+                                  : item?.product?.image_url
+                              }
                             />
                           </div>
                           <div className="w-56">

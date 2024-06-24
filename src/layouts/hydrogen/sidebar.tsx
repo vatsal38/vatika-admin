@@ -15,13 +15,13 @@ export default function Sidebar({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-5 pt-5 dark:bg-gray-100/5 2xl:px-8 2xl:pt-6">
+      <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pt-5 dark:bg-gray-100/5 2xl:px-8 2xl:pt-6">
         <Link
           href={'/'}
           aria-label="Site Logo"
           className="text-gray-800 hover:text-gray-900"
         >
-          <img src={'logo-vatika.png'} alt="Isomorphic" />
+          <img src={'logo-vatika.png'} alt="Vatika Logo" className='w-32' />
         </Link>
       </div>
 

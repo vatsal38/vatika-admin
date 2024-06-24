@@ -49,7 +49,7 @@ export default function AuthWrapperOne({
               >
                 <img
                   src={'logo-vatika.png'}
-                  alt="Isomorphic"
+                  alt="Vatika logo"
                   className="dark:invert"
                 />
               </Link>
